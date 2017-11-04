@@ -1,68 +1,83 @@
 # -*- coding: utf-8 -*-
 import requests
+import sys
 
 
-class PageSpeed:
+class PagePerformance:
     """
     Performance analysis. It uses Google PageSpeed API under the hood.
 
     Example of usage:
         test = PageSpeed("https://example.com/")
 
-        print("Status code:", test.status_code())
-        print("ID:", test.id())
-        print("Title:", test.title())
-        print("Speed:", test.speed())
-        print("Usability:", test.usability())
     """
 
-    def __init__(self, url, strategy):
+    def __init__(self, url, strategy='all'):
         self.url = url
-        self.strategy = strategy  # mobile, desktop
-        self.res = requests.get('https://www.googleapis.com/pagespeedonline/v2/runPagespeed',
-                                params={'url': self.url,
-                                        'strategy': self.strategy,
-                                        'key': "AIzaSyBXODcaGIeQDWqalKJTyzxOdqFbgAR8Vr8"})
+        self.api_request_url = 'https://www.googleapis.com/pagespeedonline/v2/runPagespeed'
+        self.key = 'AIzaSyBXODcaGIeQDWqalKJTyzxOdqFbgAR8Vr8'
 
-    def status_code(self):
-        """
-        Returns Status Code of the response
-        :return: status code:  int
-        """
-        return self.res.json()["responseCode"]
-
-    def id(self):
-        """
-        Returns ID (url of the page under test)
-        :return: ID: str
-        """
-        return self.res.json()["id"]
-
-    def title(self):
-        """
-        Returns Title of the page under test
-        :return: title: str
-        """
-        return self.res.json()["title"]
-
-    def speed(self):
-        """
-        Returns Speed score for the page under test (score = 0...100)
-        :return: speed score:  int
-        """
-        return self.res.json()["ruleGroups"]["SPEED"]["score"]
-
-    def usability(self):
-        """
-        Returns Usability score for the page under test (score = 0...100)
-        :return:
-        """
-        if self.strategy == "mobile":
-            return self.res.json()["ruleGroups"]["USABILITY"]["score"]
-
+        if strategy == 'mobile':
+            self.res_mobile = requests.get(self.api_request_url,
+                                           params={'url': self.url,
+                                                   'strategy': 'mobile',
+                                                   'key': self.key})
+        if strategy == 'desktop':
+            self.res_desktop = requests.get(self.api_request_url,
+                                            params={'url': self.url,
+                                                    'strategy': 'desktop',
+                                                    'key': self.key})
         else:
-            return None
+            self.res_mobile = requests.get(self.api_request_url,
+                                           params={'url': self.url,
+                                                   'strategy': 'mobile',
+                                                   'key': self.key})
+
+            self.res_desktop = requests.get(self.api_request_url,
+                                            params={'url': self.url,
+                                                    'strategy': 'desktop',
+                                                    'key': self.key})
+
+    def mobile_performance(self):
+        """
+        Performance testing for mobile
+        :return: {'status_code': status code of the response ('int'),
+                  'id': url of the page under the performance test ('str'),
+                  'title': the title of the page under test ('str'),
+                  'speed': speed score of the page under test (score = 0...100, 'int'),
+                  'usability': usability (for mobile only) of the page under test (value = 0...100, 'int'),
+                   }
+
+        """
+        return {'status_code': self.res_mobile.json()["responseCode"],
+                'id': self.res_mobile.json()["id"],
+                'title': self.res_mobile.json()["title"],
+                'speed': self.res_mobile.json()["ruleGroups"]["SPEED"]["score"],
+                'usability': self.res_mobile.json()["ruleGroups"]["USABILITY"]["score"],  # for mobile only
+                }
+
+    def desktop_performance(self):
+        """
+        Performance testing for desktop
+        :return: {'status_code': status code of the response ('int'),
+                  'id': url of the page under the performance test ('str'),
+                  'title': the title of the page under test ('str'),
+                  'speed': speed score of the page under test (score = 0...100, 'int'),
+                   }
+        """
+        return {'status_code': self.res_desktop.json()["responseCode"],
+                'id': self.res_desktop.json()["id"],
+                'title': self.res_desktop.json()["title"],
+                'speed': self.res_desktop.json()["ruleGroups"]["SPEED"]["score"],
+                }
 
 
 if __name__ == '__main__':
-    pass
+    if len(sys.argv) > 1:
+        page_url = sys.argv[1]
+    else:
+        page_url = input("We need URL of the page to test (for example 'https://example.com'):\n")
+
+    test_result = PagePerformance(page_url)
+    print(test_result.mobile_performance()["status_code"])
+    print(test_result.desktop_performance()["speed"])
