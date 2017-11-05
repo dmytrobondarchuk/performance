@@ -81,3 +81,5 @@ if __name__ == '__main__':
     test_result = PagePerformance(page_url)
     print(test_result.mobile_performance()["status_code"])
     print(test_result.desktop_performance()["speed"])
+
+# TODO: It will be better to parse the input parameters as described in "http://jenyay.net/Programming/Argparse"
