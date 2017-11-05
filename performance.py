@@ -11,11 +11,11 @@ class PagePerformance:
         test = PageSpeed("https://example.com/")
 
     """
+    api_request_url = 'https://www.googleapis.com/pagespeedonline/v2/runPagespeed'
+    key = 'AIzaSyBXODcaGIeQDWqalKJTyzxOdqFbgAR8Vr8'
 
     def __init__(self, url, strategy='all'):
         self.url = url
-        self.api_request_url = 'https://www.googleapis.com/pagespeedonline/v2/runPagespeed'
-        self.key = 'AIzaSyBXODcaGIeQDWqalKJTyzxOdqFbgAR8Vr8'
 
         if strategy == 'mobile':
             self.res_mobile = requests.get(self.api_request_url,
@@ -72,14 +72,25 @@ class PagePerformance:
                 }
 
 
+def testing(*args):
+    """
+    Provides the testing process
+    """
+    print("args:", args[0])
+    for i in args[0]:
+        test_result = PagePerformance(i)
+        print("Results of testing '{}':".format(i))
+        print(test_result.mobile_performance()["status_code"])
+        print(test_result.desktop_performance()["speed"])
+
+
+
 if __name__ == '__main__':
     if len(sys.argv) > 1:
-        page_url = sys.argv[1]
+        page_url = sys.argv[1:]
     else:
         page_url = input("We need URL of the page to test (for example 'https://example.com'):\n")
 
-    test_result = PagePerformance(page_url)
-    print(test_result.mobile_performance()["status_code"])
-    print(test_result.desktop_performance()["speed"])
+    testing(page_url)
 
 # TODO: It will be better to parse the input parameters as described in "http://jenyay.net/Programming/Argparse"
