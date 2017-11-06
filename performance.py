@@ -79,21 +79,25 @@ class PagePerformance:
         :return: dictionary {"mobile": mobile_status,
                              "desktop": desktop_status}
         """
-        if self.res_mobile.json()["responseCode"] == 200:
-            if self.res_mobile.json()["ruleGroups"]["SPEED"]["score"] >= admissible_mobile:
-                mobile_status = (True, 'PASSED')
+        if self.res_mobile.status_code == 200:
+            value_mobile = self.res_desktop.json()["ruleGroups"]["SPEED"]["score"]
+            if value_mobile >= admissible_mobile:
+                mobile_status = (True, 'PASSED', value_mobile)
             else:
-                mobile_status = (False, 'FAILED')
+                mobile_status = (False, 'FAILED', value_mobile)
         else:
-            mobile_status = (False, 'ERROR')
+            value_mobile = 0
+            mobile_status = (False, 'ERROR', value_mobile)
 
-        if self.res_desktop.json()["responseCode"] == 200:
-            if self.res_desktop.json()["ruleGroups"]["SPEED"]["score"] >= admissible_desktop:
-                desktop_status = (True, 'PASSED')
+        if self.res_desktop.status_code == 200:
+            value_desktop = self.res_desktop.json()["ruleGroups"]["SPEED"]["score"]
+            if value_desktop >= admissible_desktop:
+                desktop_status = (True, 'PASSED', value_desktop)
             else:
-                desktop_status = (False, 'FAILED')
+                desktop_status = (False, 'FAILED', value_desktop)
         else:
-            desktop_status = (False, 'ERROR')
+            value_desktop = 0
+            desktop_status = (False, 'ERROR', value_desktop)
 
         return {"mobile": mobile_status,
                 "desktop": desktop_status}
@@ -104,14 +108,14 @@ def testing(*args):
     Provides the testing process
     """
     for i in args[0]:
-        test_result = PagePerformance(i)
+        test_result = PagePerformance(i).performance_adequacy(admissible_mobile=95)
         print("Performance testing {page}:".format(page=i))
         print("  - mobile performance: {value}/100 ............................................. {status}".format(
-            value=test_result.mobile_performance()['speed'],
-            status=test_result.performance_adequacy()["mobile"][1]))
+            value=test_result["mobile"][2],
+            status=test_result["mobile"][1]))
         print("  - desktop performance: {value}/100 ............................................ {status}\n".format(
-            value=test_result.desktop_performance()['speed'],
-            status=test_result.performance_adequacy()["desktop"][1]))
+            value=test_result["desktop"][2],
+            status=test_result["desktop"][1]))
 
 
 if __name__ == '__main__':
