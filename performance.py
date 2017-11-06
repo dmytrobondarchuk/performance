@@ -22,7 +22,7 @@ class PagePerformance:
                                            params={'url': self.url,
                                                    'strategy': 'mobile',
                                                    'key': self.key})
-        if strategy == 'desktop':
+        elif strategy == 'desktop':
             self.res_desktop = requests.get(self.api_request_url,
                                             params={'url': self.url,
                                                     'strategy': 'desktop',
