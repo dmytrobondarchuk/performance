@@ -71,17 +71,47 @@ class PagePerformance:
                 'speed': self.res_desktop.json()["ruleGroups"]["SPEED"]["score"],
                 }
 
+    def performance_adequacy(self, admissible_mobile=90, admissible_desktop=90):
+        """
+        The adequacy of mobile and desktop performance
+        :param admissible_mobile: the value of mobile performance that is admissible
+        :param admissible_desktop: the value of desktop performance that is admissible
+        :return: dictionary {"mobile": mobile_status,
+                             "desktop": desktop_status}
+        """
+        if self.res_mobile.json()["responseCode"] == 200:
+            if self.res_mobile.json()["ruleGroups"]["SPEED"]["score"] >= admissible_mobile:
+                mobile_status = (True, 'PASSED')
+            else:
+                mobile_status = (False, 'FAILED')
+        else:
+            mobile_status = (False, 'ERROR')
+
+        if self.res_desktop.json()["responseCode"] == 200:
+            if self.res_desktop.json()["ruleGroups"]["SPEED"]["score"] >= admissible_desktop:
+                desktop_status = (True, 'PASSED')
+            else:
+                desktop_status = (False, 'FAILED')
+        else:
+            desktop_status = (False, 'ERROR')
+
+        return {"mobile": mobile_status,
+                "desktop": desktop_status}
+
 
 def testing(*args):
     """
     Provides the testing process
     """
-    print("args:", args)
     for i in args[0]:
         test_result = PagePerformance(i)
-        print("Results of testing '{}':".format(i))
-        print(test_result.mobile_performance()["status_code"])
-        print(test_result.desktop_performance()["speed"])
+        print("Performance testing {page}:".format(page=i))
+        print("  - mobile performance: {value}/100 ............................................. {status}".format(
+            value=test_result.mobile_performance()['speed'],
+            status=test_result.performance_adequacy()["mobile"][1]))
+        print("  - desktop performance: {value}/100 ............................................ {status}\n".format(
+            value=test_result.desktop_performance()['speed'],
+            status=test_result.performance_adequacy()["desktop"][1]))
 
 
 if __name__ == '__main__':
@@ -94,5 +124,3 @@ if __name__ == '__main__':
               "Also there can be multiple urls, separated by comma,\n" +
               "for example: https://example1.com https://example2.com https://example3.com\n\n" +
               "Please, retry ...")
-
-# TODO: It will be better to parse the input parameters as described in "http://jenyay.net/Programming/Argparse"
