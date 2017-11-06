@@ -40,7 +40,7 @@ class PagePerformance:
 
     def mobile_performance(self):
         """
-        Performance testing for mobile
+        Mobile performance testing
         :return: {'status_code': status code of the response ('int'),
                   'id': url of the page under the performance test ('str'),
                   'title': the title of the page under test ('str'),
@@ -58,7 +58,7 @@ class PagePerformance:
 
     def desktop_performance(self):
         """
-        Performance testing for desktop
+        Desktop performance testing
         :return: {'status_code': status code of the response ('int'),
                   'id': url of the page under the performance test ('str'),
                   'title': the title of the page under test ('str'),
@@ -82,7 +82,6 @@ def testing(*args):
         print("Results of testing '{}':".format(i))
         print(test_result.mobile_performance()["status_code"])
         print(test_result.desktop_performance()["speed"])
-
 
 
 if __name__ == '__main__':
