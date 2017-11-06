@@ -1,0 +1,12 @@
+language: python
+dist: trusty
+matrix:
+  include:
+      - python: "3.5"
+        env: REQUIREMENTS="requirements.txt" EXTRA_DEPS=""
+      - python: "3.6"
+      env: REQUIREMENTS="requirements.txt" EXTRA_DEPS=""
+
+script:
+    - pip install -r requirements.txt
+    - py.test -sv
