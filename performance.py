@@ -76,7 +76,7 @@ def testing(*args):
     """
     Provides the testing process
     """
-    print("args:", args[0])
+    print("args:", args)
     for i in args[0]:
         test_result = PagePerformance(i)
         print("Results of testing '{}':".format(i))
@@ -87,9 +87,12 @@ def testing(*args):
 if __name__ == '__main__':
     if len(sys.argv) > 1:
         page_url = sys.argv[1:]
+        testing(page_url)
     else:
-        page_url = input("We need URL of the page to test (for example 'https://example.com'):\n")
-
-    testing(page_url)
+        print("We need an URL of the page to test,\n" +
+              "for example 'https://example.com'.\n\n" +
+              "Also there can be multiple urls, separated by comma,\n" +
+              "for example: https://example1.com https://example2.com https://example3.com\n\n" +
+              "Please, retry ...")
 
 # TODO: It will be better to parse the input parameters as described in "http://jenyay.net/Programming/Argparse"
