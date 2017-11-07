@@ -1,6 +1,23 @@
 # -*- coding: utf-8 -*-
 import requests
 import sys
+import os.path
+
+
+def get_urls_from_file():
+    """
+    Gets urls of pages to test their performance
+    :param path: default path to the file with urls
+    :return: list of urls
+    """
+    urls = []
+    with open('file_with_urls.txt', 'r', encoding='utf-8') as f:
+        for line in f:
+            if '\n' in line:
+                urls.append(line[:-1])
+            else:
+                urls.append(line)
+    return urls
 
 
 class PagePerformance:
@@ -74,7 +91,7 @@ class PagePerformance:
                 'speed': self.res_desktop.json()["ruleGroups"]["SPEED"]["score"],
                 }
 
-    def performance_adequacy(self, admissible_mobile=90, admissible_desktop=90):
+    def performance_adequacy(self, admissible_mobile=75, admissible_desktop=75):
         """
         The adequacy of mobile and desktop performance
         :param admissible_mobile: the value of mobile performance that is admissible
@@ -111,7 +128,7 @@ def testing(*args):
     Provides the testing process
     """
     for i in args[0]:
-        test_result = PagePerformance(i).performance_adequacy(admissible_mobile=95)
+        test_result = PagePerformance(i).performance_adequacy()
         print("Performance testing {page}:".format(page=i))
         print("  - mobile performance: {value}/100 ............................................. {status}".format(
             value=test_result["mobile"][2],
@@ -126,8 +143,12 @@ if __name__ == '__main__':
         page_url = sys.argv[1:]
         testing(page_url)
     else:
-        print("We need an URL of the page to test,\n" +
-              "for example 'https://example.com'.\n\n" +
-              "Also there can be multiple urls, separated by comma,\n" +
-              "for example: https://example1.com https://example2.com https://example3.com\n\n" +
-              "Please, retry ...")
+        if os.path.exists('file_with_urls.txt'):
+            testing(get_urls_from_file())
+        else:
+            print("We need an URL of the page to test,\n" +
+                  "for example 'https://example.com'.\n\n" +
+                  "Also there can be multiple urls, separated by comma,\n" +
+                  "for example: https://example1.com https://example2.com https://example3.com\n\n" +
+                  "Also urls of the page can be read from the file 'file_with_urls.txt'"
+                  "Please, retry ...")
