@@ -8,7 +8,10 @@ class PagePerformance:
     Performance analysis. It uses Google PageSpeed API under the hood.
 
     Example of usage:
+      from python code:
         test = PageSpeed("https://example.com/")
+      or from command line:
+        python3 performance.py https://example1.com http://example2.com http://example3.com
 
     """
     api_request_url = 'https://www.googleapis.com/pagespeedonline/v2/runPagespeed'
