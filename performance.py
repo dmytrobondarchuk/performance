@@ -10,7 +10,10 @@ message = {'no_urls': "We need an URL of the page to test,\n" +
                       "for example: https://example1.com https://example2.com https://example3.com\n\n" +
                       "Also urls of the page can be read from the file 'file_with_urls.txt'"
                       "Please, retry ...",
-           'using_urls_from_file': "We've got urls from the file 'file_with_urls.txt'", }
+           'using_urls_from_file': "We've got urls from the file 'file_with_urls.txt'",
+           'test_results': "\n==============================\n" +
+                           "Results of performance testing:\n" +
+                           "=============================="}
 
 
 def get_urls_from_file():
@@ -22,10 +25,11 @@ def get_urls_from_file():
     urls = []
     with open('file_with_urls.txt', 'r', encoding='utf-8') as f:
         for line in f:
-            if '\n' in line:
-                urls.append(line[:-1])
-            else:
-                urls.append(line)
+            if 'http' in line[:4]:
+                if '\n' in line:
+                    urls.append(line[:-1])
+                else:
+                    urls.append(line)
     return urls
 
 
@@ -136,8 +140,7 @@ def testing(*args):
     """
     Provides the testing process
     """
-    print("Results of performance testing:")
-    print("==============================")
+    print(message['test_results'])
     for i in args[0]:
         test_result = PagePerformance(i).performance_adequacy()
         print("{page}:".format(page=i))
