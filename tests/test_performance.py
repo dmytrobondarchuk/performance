@@ -57,3 +57,9 @@ class TestInputFromFile:
         urls_from_file = get_urls_from_file(path_to_test_file_with_urls)
 
         assert urls_from_file == self.expected_urls_one
+
+    @pytest.mark.parametrize('path_to_absent_file', ("tests/nofile.txt", ))
+    def test_no_file_with_urls(self, path_to_absent_file):
+        """There are no file with urls. """
+        with pytest.raises(FileNotFoundError):
+            assert get_urls_from_file(path_to_absent_file)
