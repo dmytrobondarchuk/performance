@@ -1,4 +1,10 @@
 # -*- coding: utf-8 -*-
+"""Tool for web-application performance analysis. It's based on Google's PageSpeed."""
+
+__author__ = "Dmytro Bondarchuk"
+__version__ = "0.1.1"
+
+
 import requests
 import sys
 import os.path
@@ -162,3 +168,5 @@ if __name__ == '__main__':
             testing(get_urls_from_file())
         else:
             print(message['no_urls'])
+
+
