@@ -100,7 +100,7 @@ class PagePerformance:
                              "desktop": desktop_status}
         """
         if self.res_mobile.status_code == 200:
-            value_mobile = self.res_desktop.json()["ruleGroups"]["SPEED"]["score"]
+            value_mobile = self.res_mobile.json()["ruleGroups"]["SPEED"]["score"]
             if value_mobile >= admissible_mobile:
                 mobile_status = (True, 'PASSED', value_mobile)
             else:
@@ -127,9 +127,11 @@ def testing(*args):
     """
     Provides the testing process
     """
+    print("Results of performance testing:")
+    print("==============================")
     for i in args[0]:
         test_result = PagePerformance(i).performance_adequacy()
-        print("Performance testing {page}:".format(page=i))
+        print("{page}:".format(page=i))
         print("  - mobile performance: {value}/100 ............................................. {status}".format(
             value=test_result["mobile"][2],
             status=test_result["mobile"][1]))
