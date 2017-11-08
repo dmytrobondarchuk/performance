@@ -47,15 +47,13 @@ class TestPerformanceCustomized:
 
 class TestInputFromFile:
     """Test Suite for the cases related to url input functionality. """
-    expected_urls = ['http://example.com/',
-                     'https://www.python.org/', 'https://www.wikipedia.org/',
-                     'https://en.wikipedia.org/wiki/Behavior-driven_development']
+    expected_urls_one = ['http://example.com/',
+                         'https://www.python.org/', 'https://www.wikipedia.org/',
+                         'https://en.wikipedia.org/wiki/Behavior-driven_development']
 
-    @pytest.mark.dev
-    @pytest.mark.parametrize("path_to_test_file_with_urls", ("tests/test_file_with_urls.txt", ))
+    @pytest.mark.parametrize("path_to_test_file_with_urls", ("tests/test_file_with_urls_one.txt", ))
     def test_read_urls_from_file(self, path_to_test_file_with_urls):
         """Valid urls are fed from the file."""
         urls_from_file = get_urls_from_file(path_to_test_file_with_urls)
 
-        assert urls_from_file == self.expected_urls
-
+        assert urls_from_file == self.expected_urls_one
