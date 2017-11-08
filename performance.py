@@ -4,6 +4,15 @@ import sys
 import os.path
 
 
+message = {'no_urls': "We need an URL of the page to test,\n" +
+                      "for example 'https://example.com'.\n\n" +
+                      "Also there can be multiple urls, separated by comma,\n" +
+                      "for example: https://example1.com https://example2.com https://example3.com\n\n" +
+                      "Also urls of the page can be read from the file 'file_with_urls.txt'"
+                      "Please, retry ...",
+           'using_urls_from_file': "We've got urls from the file 'file_with_urls.txt'", }
+
+
 def get_urls_from_file():
     """
     Gets urls of pages to test their performance
@@ -146,11 +155,7 @@ if __name__ == '__main__':
         testing(page_url)
     else:
         if os.path.exists('file_with_urls.txt'):
+            print(message['using_urls_from_file'])
             testing(get_urls_from_file())
         else:
-            print("We need an URL of the page to test,\n" +
-                  "for example 'https://example.com'.\n\n" +
-                  "Also there can be multiple urls, separated by comma,\n" +
-                  "for example: https://example1.com https://example2.com https://example3.com\n\n" +
-                  "Also urls of the page can be read from the file 'file_with_urls.txt'"
-                  "Please, retry ...")
+            print(message['no_urls'])
