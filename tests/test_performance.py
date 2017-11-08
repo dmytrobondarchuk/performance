@@ -1,5 +1,6 @@
 import pytest
 from ..performance import PagePerformance
+from ..performance import get_urls_from_file
 
 
 @pytest.mark.parametrize("test_url", ("https://example.com", ))
@@ -42,3 +43,19 @@ class TestPerformanceCustomized:
 
         assert test_page.mobile_performance()["status_code"] == 200
         assert test_page.desktop_performance()["status_code"] == 200
+
+
+class TestInputFromFile:
+    """Test Suite for the cases related to url input functionality. """
+    expected_urls = ['http://example.com/',
+                     'https://www.python.org/', 'https://www.wikipedia.org/',
+                     'https://en.wikipedia.org/wiki/Behavior-driven_development']
+
+    @pytest.mark.dev
+    @pytest.mark.parametrize("path_to_test_file_with_urls", ("tests/test_file_with_urls.txt", ))
+    def test_read_urls_from_file(self, path_to_test_file_with_urls):
+        """Valid urls are fed from the file."""
+        urls_from_file = get_urls_from_file(path_to_test_file_with_urls)
+
+        assert urls_from_file == self.expected_urls
+

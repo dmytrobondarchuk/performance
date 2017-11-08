@@ -21,14 +21,14 @@ message = {'no_urls': "We need an URL of the page to test,\n" +
            }
 
 
-def get_urls_from_file():
+def get_urls_from_file(path_to_file_with_urls='file_with_urls.txt'):
     """
     Gets urls of pages to test their performance
-    :param path: default path to the file with urls
+    :param path_to_file_with_urls: default path to the file with urls
     :return: list of urls
     """
     urls = []
-    with open('file_with_urls.txt', 'r', encoding='utf-8') as f:
+    with open(path_to_file_with_urls, 'r', encoding='utf-8') as f:
         for line in f:
             if 'http' in line[:4]:
                 if '\n' in line:
