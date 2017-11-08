@@ -17,9 +17,8 @@ message = {'no_urls': "We need an URL of the page to test,\n" +
                       "Also urls of the page can be read from the file 'file_with_urls.txt'"
                       "Please, retry ...",
            'using_urls_from_file': "We've got urls from the file 'file_with_urls.txt'",
-           'test_results': "\n==============================\n" +
-                           "Results of performance testing:\n" +
-                           "=============================="}
+           'test_results': "\n{:-^80}\n".format(" Results of performance testing "),
+           }
 
 
 def get_urls_from_file():
@@ -149,12 +148,14 @@ def testing(*args):
     print(message['test_results'])
     for i in args[0]:
         test_result = PagePerformance(i).performance_adequacy()
-        print("{page}:".format(page=i))
-        print("  - mobile performance: {value}/100 ............................................. {status}".format(
+        print("{:-^80}".format(" " + i + " "))
+        print("  - mobile performance: {value}/100 {de} {status}".format(
             value=test_result["mobile"][2],
+            de='{:.<41}'.format(""),
             status=test_result["mobile"][1]))
-        print("  - desktop performance: {value}/100 ............................................ {status}\n".format(
+        print("  - desktop performance: {value}/100 {de} {status}\n".format(
             value=test_result["desktop"][2],
+            de='{:.<40}'.format(""),
             status=test_result["desktop"][1]))
 
 
@@ -168,5 +169,3 @@ if __name__ == '__main__':
             testing(get_urls_from_file())
         else:
             print(message['no_urls'])
-
-
