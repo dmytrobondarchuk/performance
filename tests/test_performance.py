@@ -1,4 +1,5 @@
 import pytest
+import os
 from ..performance import PagePerformance
 from ..performance import get_urls_from_file
 
@@ -63,3 +64,19 @@ class TestInputFromFile:
         """There are no file with urls. """
         with pytest.raises(FileNotFoundError):
             assert get_urls_from_file(path_to_absent_file)
+
+
+class TestInputArgs:
+    """Test Suite for testing cases with command line argumets. """
+    @pytest.mark.parametrize("command_line", (
+            "python performance.py",
+            "python performance.py --urls",
+            "python performance.py --urls http://example.com",
+            "python performance.py --file",
+            "python performance.py --file test_file_with_urls_one.txt",
+            "python performance.py --file test_file_with_urls_one.txt test_file_with_urls_one.txt",
+            "python performance.py --urls --file",
+            "python performance.py --urls http://example.com --file test_file_with_urls_one.txt"))
+    def test_valid_input_args(self, command_line):
+        """Test Suite to test input args. """
+        pass
