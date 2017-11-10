@@ -171,8 +171,7 @@ def get_urls_from_file(files_with_urls):
 def main(args):
     """Run testing"""
     print(message['test_results'])
-    # print('file:', args.file)
-    # print('urls:', args.urls)
+
     if args.file is not None:
         if len(args.file) == 0:
             testing(get_urls_from_file('file_with_urls.txt'))
@@ -188,7 +187,7 @@ def main(args):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='User database utility')
     parser.add_argument('--urls', nargs='*', help='Urls directly passed from terminal', )
-    parser.add_argument('--file', nargs='*', help='Urls from the file.')
+    parser.add_argument('--file', nargs='*', help='Path to files with urls.')
     parser.set_defaults(func=main)
     passed_args = parser.parse_args()
     passed_args.func(passed_args)
