@@ -8,6 +8,7 @@ __version__ = "0.1.1"
 import requests
 import sys
 import os.path
+import argparse
 
 
 message = {'no_urls': "We need an URL of the page to test,\n" +
@@ -19,23 +20,6 @@ message = {'no_urls': "We need an URL of the page to test,\n" +
            'using_urls_from_file': "We've got urls from the file 'file_with_urls.txt'",
            'test_results': "\n{:-^80}\n".format(" Results of performance testing "),
            }
-
-
-def get_urls_from_file(path_to_file_with_urls='file_with_urls.txt'):
-    """
-    Gets urls of pages to test their performance
-    :param path_to_file_with_urls: default path to the file with urls
-    :return: list of urls
-    """
-    urls = []
-    with open(path_to_file_with_urls, 'r', encoding='utf-8') as f:
-        for line in f:
-            if 'http' in line[:4]:
-                if '\n' in line:
-                    urls.append(line[:-1])
-                else:
-                    urls.append(line)
-    return urls
 
 
 class PagePerformance:
@@ -141,12 +125,11 @@ class PagePerformance:
                 "desktop": desktop_status}
 
 
-def testing(*args):
+def testing(urls_to_test):
     """
     Provides the testing process
     """
-    print(message['test_results'])
-    for i in args[0]:
+    for i in urls_to_test:
         test_result = PagePerformance(i).performance_adequacy()
         print("{:-^80}".format(" " + i + " "))
         print("  - mobile performance: {value}/100 {de} {status}".format(
@@ -159,13 +142,55 @@ def testing(*args):
             status=test_result["desktop"][1]))
 
 
-if __name__ == '__main__':
-    if len(sys.argv) > 1:
-        page_url = sys.argv[1:]
-        testing(page_url)
+def get_urls_from_file(files_with_urls):
+    """
+    Gets urls of pages to test their performance
+    :param files_with_urls: default path to the file with urls or list of ones
+    :return: list of urls
+    """
+    urls = []
+
+    if type(files_with_urls) == str:
+        with open(files_with_urls, 'r', encoding='utf-8') as f:
+            for line in f:
+                if 'http' in line[:4]:
+                    if '\n' in line:
+                        urls.append(line[:-1])
+                    else:
+                        urls.append(line)
     else:
-        if os.path.exists('file_with_urls.txt'):
-            print(message['using_urls_from_file'])
-            testing(get_urls_from_file())
+        for text_file in files_with_urls:
+            with open(text_file, 'r', encoding='utf-8') as f:
+                for line in f:
+                    if 'http' in line[:4]:
+                        if '\n' in line:
+                            urls.append(line[:-1])
+                        else:
+                            urls.append(line)
+    return urls
+
+
+def main(args):
+    """Run testing"""
+    print(message['test_results'])
+    # print('file:', args.file)
+    # print('urls:', args.urls)
+    if args.file is not None:
+        if len(args.file) == 0:
+            testing(get_urls_from_file('file_with_urls.txt'))
         else:
-            print(message['no_urls'])
+            testing(get_urls_from_file(args.file))
+
+    if args.urls:
+        testing(args.urls)
+    if ((args.file is None) and (args.urls is None)) or ((args.file is None) and (len(args.urls) == 0)):
+        print("No urls")
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='User database utility')
+    parser.add_argument('--urls', nargs='*', help='Urls directly passed from terminal', )
+    parser.add_argument('--file', nargs='*', help='Urls from the file.')
+    parser.set_defaults(func=main)
+    passed_args = parser.parse_args()
+    passed_args.func(passed_args)
