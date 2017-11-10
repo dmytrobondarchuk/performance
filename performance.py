@@ -2,12 +2,10 @@
 """Tool for web-application performance analysis. It's based on Google's PageSpeed."""
 
 __author__ = "Dmytro Bondarchuk"
-__version__ = "0.1.1"
+__version__ = "0.2.1"
 
 
 import requests
-import sys
-import os.path
 import argparse
 
 
