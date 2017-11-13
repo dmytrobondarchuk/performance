@@ -7,6 +7,5 @@ ADD performance.py  /
 ADD requirements.txt  /
 
 RUN pip install -r requirements.txt
-
-CMD ["/bin/bash", "-l"]
+ENTRYPOINT ["python", "performance.py"]
 
