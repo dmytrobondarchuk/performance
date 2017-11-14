@@ -20,10 +20,7 @@ Usage
 **Virtual environment:**
 1. ```cd performance```
 2. ```source env/bin/activate```
-3. ```python performance.py [-h]``` 
-```                      [--urls [URL [URLS ...]]]```
-```                      [--file [FILE [FILE ...]]]```
-```                      [--dir [DIR [DIR ...]]]```
+3. ```python performance.py [-h] [--urls [URL [URLS ...]]] [--file [FILE [FILE ...]]] [--dir [DIR [DIR ...]]]```
 
 
 _optional arguments:_
