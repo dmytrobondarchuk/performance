@@ -202,8 +202,11 @@ def main(args):
         else:
             testing(get_urls_from_file(args.file))
 
-    if args.urls:
-        testing(args.urls)
+    if args.url is not None:
+        if len(args.url) == 0:
+            print("No urls")
+        else:
+            testing(args.url)
 
     if args.dir is not None:
         if len(args.dir) == 0:
@@ -211,15 +214,20 @@ def main(args):
         else:
             testing(get_urls_from_dir(args.dir))
 
-    if (args.file, args.urls, args.dir).count(None) == 3:
-        print("No urls")
+    if (args.file, args.url, args.dir).count(None) == 3:
+        print("No urls. Please retry. Use [-h, --help] for help")
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='User database utility')
-    parser.add_argument('--urls', nargs='*', help='Urls directly passed from terminal', )
-    parser.add_argument('--file', nargs='*', help='Path to files with urls.', )
-    parser.add_argument('--dir', nargs='*', help='Paths to the dirs with text files with urls.', )
+    parser.add_argument('--url', nargs='*', help='Url of the page test '
+                                                 '(Example:  --url https://url1.com https://url2.org ...)', )
+    parser.add_argument('--file', nargs='*', help='Path to file with urls. '
+                                                  '(Example: --file /abs_path/to/the/dir/file.txt  '
+                                                  'relative/to/performance/file.txt)', )
+    parser.add_argument('--dir', nargs='*', help='Path to the dir with text files with urls.'
+                                                 'Example:  --dir /abs/path/to/dir_with_files '
+                                                 'path/relative/to/performance/dir_with_files', )
     parser.set_defaults(func=main)
     passed_args = parser.parse_args()
     passed_args.func(passed_args)

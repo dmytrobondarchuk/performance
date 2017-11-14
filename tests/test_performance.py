@@ -75,18 +75,18 @@ class TestInputArgs:
 
     @pytest.mark.parametrize("command_line", (
             "python performance.py",
-            "python performance.py --urls",
-            "python performance.py --urls http://example.com",
+            "python performance.py --url",
+            "python performance.py --url http://example.com",
             "python performance.py --file",
             "python performance.py --file test_file_with_urls_one.txt",
             "python performance.py --file test_file_with_urls_one.txt test_file_with_urls_one.txt",
-            "python performance.py --urls --file",
-            "python performance.py --urls http://example.com --file test_file_with_urls_one.txt"))
+            "python performance.py --url --file",
+            "python performance.py --url http://example.com --file test_file_with_urls_one.txt"))
     def test_valid_input_args(self, command_line):
         """Test Suite to test input args. """
         pass
 
-@pytest.mark.dev
+
 class TestGetUrlsFromDir:
     """Tests for the function to get urls from dirs."""
 

@@ -30,10 +30,10 @@ Usage
 _optional arguments:_
   - -h, --help 
   show the help message and exit
-  - --urls [URLS [URLS ...]]
-                        Urls directly passed from terminal
+  - --url [URL [URL ...]]
+                        Url directly passed from terminal
   - --file [FILE [FILE ...]]
-                        Path to files with urls.
+                        Path to file with urls.
   - --dir [DIR [DIR ...]]
-                        Paths to the dirs with text files with urls.
+                        Path to the dir with text files with urls.
 
