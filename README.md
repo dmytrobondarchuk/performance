@@ -29,11 +29,11 @@ Usage
                       
 _optional arguments:_
   - -h, --help 
-  show the help message and exit
+                        _show the help message and exit_
   - --url [URL [URL ...]]
-                        Url directly passed from terminal
+                        _url of the page_
   - --file [FILE [FILE ...]]
-                        Path to file with urls.
+                        _path to file with urls_
   - --dir [DIR [DIR ...]]
-                        Path to the dir with text files with urls.
+                        _path to the dir with text files with urls_
 
