@@ -2,9 +2,10 @@ import pytest
 import os
 from ..performance import PagePerformance
 from ..performance import get_urls_from_file
+from ..performance import get_urls_from_dir
 
 
-@pytest.mark.parametrize("test_url", ("https://example.com", ))
+@pytest.mark.parametrize("test_url", ("https://example.com",))
 class TestPerformance:
     def test_desktop(self, test_url):
         """Testing desktop performance metering"""
@@ -22,7 +23,7 @@ class TestPerformance:
         assert test_page.mobile_performance()["usability"] == 100
 
 
-@pytest.mark.parametrize("test_url", ("https://example.com", ))
+@pytest.mark.parametrize("test_url", ("https://example.com",))
 class TestPerformanceCustomized:
     def test_mobile(self, test_url):
         """Testing the case of mobile performance metering only"""
@@ -52,14 +53,14 @@ class TestInputFromFile:
                          'https://www.python.org/', 'https://www.wikipedia.org/',
                          'https://en.wikipedia.org/wiki/Behavior-driven_development']
 
-    @pytest.mark.parametrize("path_to_test_file_with_urls", ("tests/test_file_with_urls_one.txt", ))
+    @pytest.mark.parametrize("path_to_test_file_with_urls", ("tests/test_file_with_urls_one.txt",))
     def test_read_urls_from_file(self, path_to_test_file_with_urls):
         """Valid urls are fed from the file."""
         urls_from_file = get_urls_from_file(path_to_test_file_with_urls)
 
         assert urls_from_file == self.expected_urls_one
 
-    @pytest.mark.parametrize('path_to_absent_file', ("tests/nofile.txt", ))
+    @pytest.mark.parametrize('path_to_absent_file', ("tests/nofile.txt",))
     def test_no_file_with_urls(self, path_to_absent_file):
         """There are no file with urls. """
         with pytest.raises(FileNotFoundError):
@@ -71,6 +72,7 @@ class TestInputFromFile:
 
 class TestInputArgs:
     """Test Suite for testing cases with command line argumets. """
+
     @pytest.mark.parametrize("command_line", (
             "python performance.py",
             "python performance.py --urls",
@@ -83,3 +85,31 @@ class TestInputArgs:
     def test_valid_input_args(self, command_line):
         """Test Suite to test input args. """
         pass
+
+@pytest.mark.dev
+class TestGetUrlsFromDir:
+    """Tests for the function to get urls from dirs."""
+
+    expected = {"one_dir":
+                    {"no_files": [],
+                     "one_file": ['http://example.com/', ],
+                     "few_files": ['http://example.com/',
+                                   'https://www.python.org/',
+                                   'https://www.wikipedia.org/',
+                                   'https://en.wikipedia.org/wiki/Behavior-driven_development']},
+                "multiple_dirs": []}
+
+    @pytest.mark.parametrize("path_to_folder, expected_result", [
+        ('tests/one_dir/no_files', expected["one_dir"]["no_files"]),
+        ('tests/one_dir/one_file', expected["one_dir"]["one_file"]),
+        ('tests/one_dir/few_files', expected["one_dir"]["few_files"]), ],
+        ids=("One dir - no files",
+             "One dir - one file",
+             "One dir - few files"))
+    def test_one_dir(self, path_to_folder, expected_result):
+        """
+        Path to the folder
+        :param path_to_folder: path to the folder with files
+        :param expected_result: expected for test case
+        """
+        assert set(get_urls_from_dir(os.path.join(os.getcwd(), path_to_folder))) == set(expected_result)

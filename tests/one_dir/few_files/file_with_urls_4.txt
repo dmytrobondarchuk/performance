@@ -1,0 +1,5 @@
+This file contains urls of pages to be tested for performance.
+Please note that the presence of "http://" or "https://" in url is mandatory
+and each url-address must be from a new line
+
+https://en.wikipedia.org/wiki/Behavior-driven_development
