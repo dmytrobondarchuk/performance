@@ -66,6 +66,9 @@ class TestInputFromFile:
             assert get_urls_from_file(path_to_absent_file)
 
 
+# TODO: Replace single '@pytest.mark.parametrize' fixture by several one separately for '--urls' and '--file' arguments.
+
+
 class TestInputArgs:
     """Test Suite for testing cases with command line argumets. """
     @pytest.mark.parametrize("command_line", (

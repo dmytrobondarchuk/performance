@@ -7,6 +7,7 @@ __version__ = "0.2.1"
 
 import requests
 import argparse
+import os
 
 
 message = {'no_urls': "We need an URL of the page to test,\n" +
@@ -168,6 +169,29 @@ def get_urls_from_file(files_with_urls):
     return urls
 
 
+def get_urls_from_dir(folder):
+    """
+    Gets urls of pages from files located in the folder to test performance of these pages.
+    :param folder: default paths to the folders with files which contain urls
+    :return: list of urls
+    """
+    folders = []
+    urls = []
+    if type(folder) == str:
+        folders.append(folder)
+    else:
+        folders = folder
+
+    for i in folders:
+        if os.path.isdir(i):
+            for text_file in os.listdir(i):
+                for each_url in (get_urls_from_file(os.path.join(os.getcwd(), i,  text_file))):
+                    urls.append(each_url)
+        else:
+            print("No such directory")
+    return urls
+
+
 def main(args):
     """Run testing"""
     print(message['test_results'])
@@ -180,14 +204,22 @@ def main(args):
 
     if args.urls:
         testing(args.urls)
-    if ((args.file is None) and (args.urls is None)) or ((args.file is None) and (len(args.urls) == 0)):
+
+    if args.dir is not None:
+        if len(args.dir) == 0:
+            testing(get_urls_from_dir('urls'))
+        else:
+            testing(get_urls_from_dir(args.dir))
+
+    if (args.file, args.urls, args.dir).count(None) == 3:
         print("No urls")
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='User database utility')
     parser.add_argument('--urls', nargs='*', help='Urls directly passed from terminal', )
-    parser.add_argument('--file', nargs='*', help='Path to files with urls.')
+    parser.add_argument('--file', nargs='*', help='Path to files with urls.', )
+    parser.add_argument('--dir', nargs='*', help='Paths to the dirs with text files with urls.', )
     parser.set_defaults(func=main)
     passed_args = parser.parse_args()
     passed_args.func(passed_args)
