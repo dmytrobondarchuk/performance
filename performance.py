@@ -194,7 +194,10 @@ def get_urls_from_dir(folder):
 
 def main(args):
     """Run testing"""
-    print(message['test_results'])
+    if (args.file, args.url, args.dir).count(None) == 3:
+        print("No urls. Please retry. Use [-h, --help] for help")
+    else:
+        print(message['test_results'])
 
     if args.file is not None:
         if len(args.file) == 0:
@@ -213,9 +216,6 @@ def main(args):
             testing(get_urls_from_dir('urls'))
         else:
             testing(get_urls_from_dir(args.dir))
-
-    if (args.file, args.url, args.dir).count(None) == 3:
-        print("No urls. Please retry. Use [-h, --help] for help")
 
 
 if __name__ == '__main__':
