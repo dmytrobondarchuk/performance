@@ -112,4 +112,4 @@ class TestGetUrlsFromDir:
         :param path_to_folder: path to the folder with files
         :param expected_result: expected for test case
         """
-        assert set(get_urls_from_dir(os.path.join(os.getcwd(), path_to_folder))) == set(expected_result)
+        assert get_urls_from_dir(os.path.join(os.getcwd(), path_to_folder)).sort() == expected_result.sort()
