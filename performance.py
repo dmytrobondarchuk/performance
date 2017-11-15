@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 """Tool for web-application performance analysis. It's based on Google's PageSpeed."""
 
-__author__ = "Dmytro Bondarchuk"
-__version__ = "0.2.1"
-
 
 import requests
 import argparse
@@ -231,3 +228,7 @@ if __name__ == '__main__':
     parser.set_defaults(func=main)
     passed_args = parser.parse_args()
     passed_args.func(passed_args)
+
+
+__author__ = "Dmytro Bondarchuk"
+__version__ = "0.2.2"
