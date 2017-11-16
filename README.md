@@ -2,7 +2,7 @@ performance
 ===========
 [![Build Status](https://travis-ci.org/dmytrobondarchuk/performance.svg?branch=master)](https://travis-ci.org/dmytrobondarchuk/performance)
     
-Performance testing tool for web applications (vers. 0.2.2)
+Performance testing tool for web applications
 
 Installation
 ------------
