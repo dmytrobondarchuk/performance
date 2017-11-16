@@ -1,8 +1,8 @@
 import pytest
 import os
-from ..performance import PagePerformance
-from ..run import get_urls_from_file
-from ..run import get_urls_from_dir
+from ..performance.page_performance import PagePerformance
+from ..performance.urls_handler import get_urls_from_file
+from ..performance.urls_handler import get_urls_from_dir
 
 
 @pytest.mark.parametrize("test_url", ("https://example.com",))

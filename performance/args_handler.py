@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """Tool for web-application performance analysis. It's based on Google's PageSpeed."""
 
-import argparse
 from .urls_handler import get_urls_from_file
 from .urls_handler import get_urls_from_dir
 
@@ -45,18 +44,28 @@ def main(args):
 
     if args.file is not None:
         if len(args.file) == 0:
-            testing(get_urls_from_file('file_with_urls.txt'))
+            print('No file(s) following the --file key. For example:')
+            print('$ python performance.py --file /path/to/file/one.txt  /path/to/file/two.txt /to/file/three.txt\n')
+            print('... please try again.\n')
+            # TODO: Create new example.txt file with https://example.com
+            # testing(get_urls_from_file('file_with_urls.txt'))
         else:
             testing(get_urls_from_file(args.file))
 
     if args.url is not None:
         if len(args.url) == 0:
-            print("No urls")
+            print("No urls following the --url key. It should looks similar to:")
+            print("$ python performance.py --url https://example.com   https://another.example.com\n")
+            print('... please try again.\n')
         else:
             testing(args.url)
 
     if args.dir is not None:
         if len(args.dir) == 0:
-            testing(get_urls_from_dir('urls'))
+            print("No path to dirs following the --dir key. It should looks similar to:")
+            print("$ python performance.py --dir /example/path/to/dir/one   /another/path/to/dir/two\n")
+            print('... please try again.\n')
+            # TODO: Create new example dir with .txt files
+            # testing(get_urls_from_dir('urls'))
         else:
             testing(get_urls_from_dir(args.dir))
