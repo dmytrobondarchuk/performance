@@ -53,7 +53,7 @@ class TestInputFromFile:
                          'https://www.python.org/', 'https://www.wikipedia.org/',
                          'https://en.wikipedia.org/wiki/Behavior-driven_development']
 
-    @pytest.mark.parametrize("path_to_test_file_with_urls", ("tests/test_file_with_urls_one.txt",))
+    @pytest.mark.parametrize("path_to_test_file_with_urls", ("tests/testdata/test_file_with_urls.txt",))
     def test_read_urls_from_file(self, path_to_test_file_with_urls):
         """Valid urls are fed from the file."""
         urls_from_file = get_urls_from_file(path_to_test_file_with_urls)
