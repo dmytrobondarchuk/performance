@@ -2,7 +2,7 @@
 """Tool for web-application performance analysis. It's based on Google's PageSpeed."""
 
 import requests
-from .settings import google_api_key
+from performance import settings
 
 
 class PagePerformance:
@@ -16,8 +16,8 @@ class PagePerformance:
         python3 performance.py https://example1.com http://example2.com http://example3.com
 
     """
-    api_request_url = 'https://www.googleapis.com/pagespeedonline/v2/runPagespeed'
-    key = google_api_key
+    api_request_url = settings.api_request_url
+    key = settings.google_api_key
 
     def __init__(self, url, strategy='all'):
         self.url = url
@@ -76,7 +76,8 @@ class PagePerformance:
                 'speed': self.res_desktop.json()["ruleGroups"]["SPEED"]["score"],
                 }
 
-    def performance_adequacy(self, admissible_mobile=75, admissible_desktop=75):
+    def performance_adequacy(self, admissible_mobile=settings.performance_acceptance_criteria['mobile'],
+                             admissible_desktop=settings.performance_acceptance_criteria['desktop']):
         """
         The adequacy of mobile and desktop performance
         :param admissible_mobile: the value of mobile performance that is admissible
