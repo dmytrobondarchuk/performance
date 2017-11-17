@@ -2,7 +2,7 @@
 """Tool for web-application performance analysis. It's based on Google's PageSpeed."""
 
 import requests
-from performance import settings
+from . import settings
 
 
 class PagePerformance:
