@@ -7,8 +7,8 @@ Performance testing tool for web applications
 Requirements
 ------------
 1. Python 3.5+
-2. PyTest >= 3.2
-3. Requests >= 2.18
+2. PyTest >= 3.2 (will be installed)
+3. Requests >= 2.18 (will be installed)
 
 
 Installation
