@@ -9,13 +9,22 @@ class PagePerformance:
     """
     Performance analysis. It uses Google PageSpeed API under the hood.
 
-    Example of usage:
-      from python code:
-        test = PageSpeed("https://example.com/")
-      or from command line:
-        python3 performance.py https://example1.com http://example2.com http://example3.com
+    Examples of usage:
 
+        from performance.page_performance import PageSpeed
+
+        test_mobile = PageSpeed("https://example.com/").mobile_performance() # returns the value of mobile performance
+        test_desktop = PageSpeed("https://example.com/").desktop_performance() # returns the value of desktop performance
+
+        assert test_mobile >= 85
+        assert test_desktop >= 75
+
+        test_page = PageSpeed("https://example.com').performance_adequacy(admissible_mobile=85, admissible_desktop=80)
+
+        assert test_page["mobile"]
+        assert test_page["desktop"]
     """
+
     api_request_url = settings.api_request_url
     key = settings.google_api_key
 
