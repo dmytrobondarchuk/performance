@@ -2,21 +2,31 @@
 """Tool for web-application performance analysis. It's based on Google's PageSpeed."""
 
 import requests
+from . import settings
 
 
 class PagePerformance:
     """
     Performance analysis. It uses Google PageSpeed API under the hood.
 
-    Example of usage:
-      from python code:
-        test = PageSpeed("https://example.com/")
-      or from command line:
-        python3 performance.py https://example1.com http://example2.com http://example3.com
+    Examples of usage:
 
+        from performance.page_performance import PageSpeed
+
+        test_mobile = PageSpeed("https://example.com/").mobile_performance() # returns the value of mobile performance
+        test_desktop = PageSpeed("https://example.com/").desktop_performance() # returns the value of desktop performance
+
+        assert test_mobile >= 85
+        assert test_desktop >= 75
+
+        test_page = PageSpeed("https://example.com').performance_adequacy(admissible_mobile=85, admissible_desktop=80)
+
+        assert test_page["mobile"]
+        assert test_page["desktop"]
     """
-    api_request_url = 'https://www.googleapis.com/pagespeedonline/v2/runPagespeed'
-    key = 'AIzaSyBXODcaGIeQDWqalKJTyzxOdqFbgAR8Vr8'
+
+    api_request_url = settings.api_request_url
+    key = settings.google_api_key
 
     def __init__(self, url, strategy='all'):
         self.url = url
@@ -75,7 +85,8 @@ class PagePerformance:
                 'speed': self.res_desktop.json()["ruleGroups"]["SPEED"]["score"],
                 }
 
-    def performance_adequacy(self, admissible_mobile=75, admissible_desktop=75):
+    def performance_adequacy(self, admissible_mobile=settings.performance_acceptance_criteria['mobile'],
+                             admissible_desktop=settings.performance_acceptance_criteria['desktop']):
         """
         The adequacy of mobile and desktop performance
         :param admissible_mobile: the value of mobile performance that is admissible
@@ -108,4 +119,4 @@ class PagePerformance:
 
 
 __author__ = "Dmytro Bondarchuk"
-__version__ = "0.2.3"
+__version__ = "0.2.4"
