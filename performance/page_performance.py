@@ -2,6 +2,7 @@
 """Tool for web-application performance analysis. It's based on Google's PageSpeed."""
 
 import requests
+from .settings import google_api_key
 
 
 class PagePerformance:
@@ -16,7 +17,7 @@ class PagePerformance:
 
     """
     api_request_url = 'https://www.googleapis.com/pagespeedonline/v2/runPagespeed'
-    key = 'AIzaSyBXODcaGIeQDWqalKJTyzxOdqFbgAR8Vr8'
+    key = google_api_key
 
     def __init__(self, url, strategy='all'):
         self.url = url
