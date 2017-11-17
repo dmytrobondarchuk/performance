@@ -1,8 +1,8 @@
 import pytest
 import os
-from ..performance.page_performance import PagePerformance
-from ..performance.urls_handler import get_urls_from_file
-from ..performance.urls_handler import get_urls_from_dir
+from ..page_performance import PagePerformance
+from ..urls_handler import get_urls_from_file
+from ..urls_handler import get_urls_from_dir
 
 
 @pytest.mark.parametrize("test_url", ("https://example.com",))
@@ -47,13 +47,20 @@ class TestPerformanceCustomized:
         assert test_page.desktop_performance()["status_code"] == 200
 
 
+# @pytest.mark.dev
 class TestInputFromFile:
     """Test Suite for the cases related to url input functionality. """
+
+    # EXPECTED:
     expected_urls_one = ['http://example.com/',
                          'https://www.python.org/', 'https://www.wikipedia.org/',
                          'https://en.wikipedia.org/wiki/Behavior-driven_development']
 
-    @pytest.mark.parametrize("path_to_test_file_with_urls", ("tests/testdata/test_file_with_urls.txt",))
+    # TEST DATA:
+
+    test_file = os.path.join(os.path.dirname(__file__), 'testdata', 'test_file_with_urls.txt')
+
+    @pytest.mark.parametrize("path_to_test_file_with_urls", (test_file,), ids=('txt file', ))
     def test_read_urls_from_file(self, path_to_test_file_with_urls):
         """Valid urls are fed from the file."""
         urls_from_file = get_urls_from_file(path_to_test_file_with_urls)
@@ -87,8 +94,11 @@ class TestInputArgs:
         pass
 
 
+@pytest.mark.dev
 class TestGetUrlsFromDir:
     """Tests for the function to get urls from dirs."""
+
+    # EXPECTED:
 
     expected = {"one_dir":
                     {"no_files": [],
@@ -99,10 +109,18 @@ class TestGetUrlsFromDir:
                                    'https://en.wikipedia.org/wiki/Behavior-driven_development']},
                 "multiple_dirs": []}
 
+    # TEST DATA
+
+    test_dir = dict(
+        no_files=os.path.join(os.path.dirname(__file__), 'testdata', 'one_dir', 'no_files'),
+        one_file=os.path.join(os.path.dirname(__file__), 'testdata', 'one_dir', 'no_files'),
+        few_files=os.path.join(os.path.dirname(__file__), 'testdata', 'one_dir', 'no_files'),
+                   )
+
     @pytest.mark.parametrize("path_to_folder, expected_result", [
-        ('tests/one_dir/no_files', expected["one_dir"]["no_files"]),
-        ('tests/one_dir/one_file', expected["one_dir"]["one_file"]),
-        ('tests/one_dir/few_files', expected["one_dir"]["few_files"]), ],
+        (test_dir['no_files'], expected["one_dir"]["no_files"]),
+        (test_dir['one_file'], expected["one_dir"]["one_file"]),
+        (test_dir['few_files'], expected["one_dir"]["few_files"]), ],
         ids=("One dir - no files",
              "One dir - one file",
              "One dir - few files"))
@@ -112,4 +130,6 @@ class TestGetUrlsFromDir:
         :param path_to_folder: path to the folder with files
         :param expected_result: expected for test case
         """
-        assert get_urls_from_dir(os.path.join(os.getcwd(), path_to_folder)).sort() == expected_result.sort()
+        assert get_urls_from_dir(path_to_folder).sort() == expected_result.sort()
+
+    # TODO: Test suite for getting urls from files located in separate folders
